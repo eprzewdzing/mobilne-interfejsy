@@ -45,5 +45,11 @@ class AppTheme {
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: AppColors.text),
     ),
+
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.white,
+    ),
   );
 }

@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisSpacing: 16,
             childAspectRatio: 1.1,
           ),
-          itemCount: 5,
+          itemCount: 6,
           itemBuilder: (context, index) {
             final projects = [
               {
@@ -41,6 +41,10 @@ class HomeScreen extends StatelessWidget {
               {
                 'title': 'Prezentacja dwóch list',
                 'route': '/projekt5',
+              },
+              {
+                'title': 'WebView',
+                'route': '/projekt6',
               },
             ];
 
