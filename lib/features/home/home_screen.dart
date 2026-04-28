@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisSpacing: 16,
             childAspectRatio: 1.1,
           ),
-          itemCount: 6,
+          itemCount: 7,
           itemBuilder: (context, index) {
             final projects = [
               {
@@ -45,6 +45,10 @@ class HomeScreen extends StatelessWidget {
               {
                 'title': 'WebView',
                 'route': '/projekt6',
+              },
+              {
+                'title': 'Blokada wybranych znaków',
+                'route': '/projekt7',
               },
             ];
 

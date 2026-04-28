@@ -10,45 +10,55 @@ class Projekt6Screen extends StatefulWidget {
 
 class _Projekt6Screen extends State<Projekt6Screen> {
   late WebViewController controller;
-  var loadingPercentage = 0;
-  int currentIndex = 0;
+  final TextEditingController urlController = TextEditingController();
 
-  final List<String> pages = [
-    'https://wfis.uni.lodz.pl',
-    'https://flutter.dev',
-    'https://google.com',
-    'https://wikipedia.org',
-  ];
+  int loadingPercentage = 0;
 
-  void loadPage(int index){
-    setState(() {
-      currentIndex = index;
-    });
-    controller.loadRequest(Uri.parse(pages[index]));
+  @override
+  void initState() {
+    super.initState();
+
+    controller = WebViewController()
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (url) {
+            setState(() {
+              loadingPercentage = 0;
+              urlController.text = url;
+            });
+          },
+          onProgress: (progress) {
+            setState(() {
+              loadingPercentage = progress;
+            });
+          },
+          onPageFinished: (url) {
+            setState(() {
+              loadingPercentage = 100;
+              urlController.text = url;
+            });
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse('https://flutter.dev'));
+
+    urlController.text = 'https://flutter.dev';
+  }
+
+  void loadPage() {
+    String url = urlController.text.trim();
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://$url';
+    }
+
+    controller.loadRequest(Uri.parse(url));
   }
 
   @override
-  void initState(){
-    super.initState();
-    controller = WebViewController()
-      ..setNavigationDelegate(NavigationDelegate(
-        onPageStarted: (url) {
-          setState(() {
-            loadingPercentage = 0;
-          });
-        },
-        onProgress: (progress) {
-          setState(() {
-            loadingPercentage = progress;
-          });
-        },
-        onPageFinished: (url) {
-          setState(() {
-            loadingPercentage = 100;
-          });
-        },
-      ))
-      ..loadRequest(Uri.parse(pages[0]));
+  void dispose() {
+    urlController.dispose();
+    super.dispose();
   }
 
   @override
@@ -57,64 +67,67 @@ class _Projekt6Screen extends State<Projekt6Screen> {
       appBar: AppBar(
         title: const Text('WebView'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () async {
-              if (await controller.canGoBack()) {
-                controller.goBack();
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.arrow_forward),
-            onPressed: () async {
-              if (await controller.canGoForward()) {
-                controller.goForward();
-              }
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              controller.reload();
-            },
-          ),
-        ],
       ),
-      body: Stack(
-          children: [
-            WebViewWidget(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () async {
+                    if (await controller.canGoBack()) {
+                      controller.goBack();
+                    }
+                  },
+                  visualDensity: VisualDensity.compact,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () async {
+                    if (await controller.canGoForward()) {
+                      controller.goForward();
+                    }
+                  },
+                  visualDensity: VisualDensity.compact,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: () {
+                    controller.reload();
+                  },
+                  visualDensity: VisualDensity.compact,
+                ),
+                Expanded(
+                  child: TextField(
+                    controller: urlController,
+                    keyboardType: TextInputType.url,
+                    decoration: InputDecoration(
+                      hintText: 'Wpisz adres URL',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: loadPage,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onSubmitted: (_) => loadPage(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (loadingPercentage < 100)
+            LinearProgressIndicator(
+              value: loadingPercentage / 100.0,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          Expanded(
+            child: WebViewWidget(
               controller: controller,
             ),
-            loadingPercentage <100
-            ? LinearProgressIndicator(
-              color: Theme.of(context).colorScheme.secondary,
-              value: loadingPercentage/100.0,
-            )
-                : const SizedBox.shrink()
-          ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: loadPage,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'WFIS'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.flutter_dash),
-            label: 'Flutter',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Google',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.public),
-              label: 'Wikipedia'
           ),
         ],
       ),
