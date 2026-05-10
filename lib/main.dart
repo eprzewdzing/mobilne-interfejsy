@@ -9,6 +9,8 @@ import 'features/projekt4/projekt4_screen.dart';
 import 'features/projekt5/projekt5_screen.dart';
 import 'features/projekt6/projekt6_screen.dart';
 import 'features/projekt7/projekt7_screen.dart';
+import 'features/projekt8/projekt8_screen.dart';
+import 'features/projekt9/projekt9_screen.dart';
 
 // Ekran glowny
 import 'features/home/home_screen.dart';
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         '/projekt5': (context) => const Projekt5Screen(),
         '/projekt6': (context) => const Projekt6Screen(),
         '/projekt7': (context) => const Projekt7Screen(),
+        '/projekt8': (context) => const Projekt8Screen(),
+        '/projekt9': (context) => const Projekt9Screen(),
       },
     );
   }

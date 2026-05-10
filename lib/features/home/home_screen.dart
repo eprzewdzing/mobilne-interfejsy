@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,           // 2 kolumny
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisSpacing: 16,
             childAspectRatio: 1.1,
           ),
-          itemCount: 7,
+          itemCount: 9,
           itemBuilder: (context, index) {
             final projects = [
               {
@@ -49,6 +49,14 @@ class HomeScreen extends StatelessWidget {
               {
                 'title': 'Blokada wybranych znaków',
                 'route': '/projekt7',
+              },
+              {
+                'title': 'Okno dialogowe',
+                'route': '/projekt8',
+              },
+              {
+                'title': 'Tło aplikacji',
+                'route': '/projekt9',
               },
             ];
 
